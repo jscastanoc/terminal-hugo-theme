@@ -1,0 +1,35 @@
+{{- $size := default "regular" (.Get "size" | lower) }}
+
+{{- if not (in (slice "regular" "large" "small") $size) }}
+  {{- $size = "regular" }}
+{{- end }}
+
+<style>
+  .columns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .columns--regular .column {
+    flex: 1 1 30%;
+  }
+  .columns--large .column {
+    flex: 1 1 45%;
+  }
+  .columns--small .column {
+    flex: 1 1 20%;
+  }
+  @media (max-width: 768px) {
+    .columns .column {
+      flex: 1 1 100%;
+    }
+  }
+</style>
+
+<div class="columns columns--{{ $size }}">
+  {{- range split .Inner "<--->" }}
+    <div class="column">
+      {{ . | markdownify | $.Page.RenderString -}}
+    </div>
+  {{- end }}
+</div>
